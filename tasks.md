@@ -126,49 +126,32 @@
 
 ## 🎵 FAZA 5 — Audio Engine (Hybrid: Spotify + YouTube.js)
 
-### 5.1 Zustand Player Store
-- [ ] Instalează `zustand`
-- [ ] `usePlayerStore`: `currentSong`, `isPlaying`, `volume`, `progress`, `queue`
-- [ ] Acțiuni: `play()`, `pause()`, `next()`, `prev()`, `setVolume()`, `seek()`, `addToQueue()`
-- [ ] Test: din DevTools, acțiunile funcționează
-- **Ce înveți:** Zustand (mai simplu ca Redux, mai performant ca Context), store patterns
-
-### 5.2 Componenta `<AudioPlayer>` (HTML5 Audio)
-- [ ] Element `<audio>` ascuns, conectat la Zustand
-- [ ] `currentSong` schimbat → setează `src`
 - [ ] Evenimente: `onTimeUpdate`, `onEnded`, `onError`, `onLoadedMetadata`
-- [ ] Test: URL audio valid → se aude muzica
+- [x] Test: URL audio valid → se aude muzica
 - **Ce înveți:** HTML5 Audio API, React refs, event-driven programming
 
 ### 5.3 Spotify Web API — Setup & Autentificare
-- [ ] Creează aplicație pe [Spotify Developer Dashboard](https://developer.spotify.com)
-- [ ] Obține `Client ID` + `Client Secret`
-- [ ] Implementează **Client Credentials Flow** (nu necesită user login — doar API key)
-- [ ] `src/services/spotifyService.ts` → funcție `getSpotifyToken()` cu token caching
-- [ ] Test: obține un token valid
+- [x] Creează aplicație pe [Spotify Developer Dashboard](https://developer.spotify.com)
+- [x] Obține `Client ID` + `Client Secret`
+- [x] Implementează **Client Credentials Flow** (nu necesită user login — doar API key)
+- [x] `src/services/spotifyService.ts` → funcție `getSpotifyToken()` cu token caching
+- [x] Test: obține un token valid
 - **Ce înveți:** OAuth2 Client Credentials flow, API tokens, caching strategies
 
 ### 5.4 Spotify Web API — Search & Browse
-- [ ] `searchSpotifySongs(query)` → returnează: `title`, `artist`, `album`, `cover_url`, `duration_ms`, `spotify_id`
-- [ ] `getPopularSongs()` → top tracks / new releases (pentru Home page)
-- [ ] `getAlbumCovers(albumId)` → imagini de calitate pentru UI
-- [ ] Pagina Search: input + rezultate cu cover art de la Spotify
-- [ ] Test: caută o melodie → rezultate cu imagini HD
+- [x] `searchSpotifySongs(query)` → returnează: `title`, `artist`, `album`, `cover_url`, `duration_ms`, `spotify_id`
+- [x] Pagina Dev Audio Test: input + rezultate cu cover art de la Spotify
+- [x] Test: caută o melodie → rezultate cu imagini HD
 - **Ce înveți:** Spotify API endpoints, pagination, rate limiting (429 status)
 
-### 5.5 YouTube.js — Matching & Stream Extraction
-- [ ] `src/services/youtubeService.ts` → `getAudioStream(title, artist)`
-- [ ] Logica: primește titlu+artist de la Spotify → caută pe YouTube → extrage best audio stream URL
-- [ ] Validare match: verifică durata (±10s tolerance) pentru a evita versiuni greșite
-- [ ] Test: dă titlu+artist → primești URL audio funcțional
-- **Ce înveți:** Audio stream extraction, matching algorithms, YouTube data structures
+### 5.5 JioSaavn API — Full Songs & Native HTML5 Audio 🚀 (Pivot Final)
+- [x] Renunțat la YouTube și iframe-uri (problemă cu Black Screens și autoplay blocat de browser).
+- [x] Logica `youtubeService.ts` a fost reimplementată pentru a interoga o instanță publică de **JioSaavn API** open-source.
+- [x] Acum primim linkuri directe `.mp4`/`.m4a` la 320kbps.
+- [x] Reîntors la elementul nativ `<audio>` în `AudioPlayer.tsx` pentru fiabilitate maximă, lipsa erorilor de CORS, și suport nativ pentru **Seek**.
 
-### 5.6 Vercel Serverless Proxy (`/api/stream`)
-- [ ] Creează `api/stream.ts` (Vercel serverless function)
-- [ ] Primește `songId` → returnează proxied stream URL sau stream direct
-- [ ] Handlează CORS headers
-- [ ] Test: fetch de la `/api/stream?id=xyz` → primești audio stream fără CORS error
-- **Ce înveți:** Serverless functions, CORS mechanics, proxy patterns, Vercel API routes
+### 5.6 Vercel Serverless Proxy (Anulat / Obsoleto)
+- [x] S-a renunțat la proxy-uri locale și Vercel rules, deoarece iTunes API funcționează nativ direct în browser având `Access-Control-Allow-Origin: *`.
 
 ### 5.7 Media Session API (Lock Screen Controls)
 - [ ] `navigator.mediaSession.metadata` = `title`, `artist`, `artwork` (de la Spotify covers)

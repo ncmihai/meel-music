@@ -13,6 +13,7 @@ interface PlayerState {
   progress: number; // current time in seconds
   duration: number; // total time in seconds
   queue: Song[];
+  seekTarget: number | null; // time to seek to (handled by AudioPlayer)
   
   // Actions
   play: (song?: Song) => void;
@@ -20,6 +21,8 @@ interface PlayerState {
   togglePlay: () => void;
   next: () => void;
   prev: () => void;
+  seek: (time: number) => void;
+  clearSeek: () => void;
   setVolume: (volume: number) => void;
   setProgress: (progress: number) => void;
   setDuration: (duration: number) => void;
@@ -35,6 +38,10 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   progress: 0,
   duration: 0,
   queue: [],
+  seekTarget: null,
+
+  seek: (time) => set({ seekTarget: time, progress: time }),
+  clearSeek: () => set({ seekTarget: null }),
 
   play: (song) => {
     if (song) {

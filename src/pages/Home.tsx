@@ -12,7 +12,7 @@ export default function Home() {
   const { user, signOut } = useAuth();
   
   // Audio Player State
-  const { currentSong, isPlaying, volume, progress, play, togglePlay, setVolume } = usePlayerStore();
+  const { currentSong, isPlaying, volume, progress, duration, play, togglePlay, setVolume } = usePlayerStore();
   
   // Search State
   const [query, setQuery] = useState('');
@@ -128,18 +128,25 @@ export default function Home() {
             {currentSong?.artist || 'Search and play a track...'}
           </p>
 
-          {/* Progress Bar (Visual only for now) */}
+          {/* Progress Bar (Interactive Seek) */}
           <div className="w-full px-8 mb-8">
-            <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-primary transition-all duration-300" 
-                style={{ width: currentSong && currentSong.duration_ms ? `${(progress / (currentSong.duration_ms / 1000)) * 100}%` : '0%' }}
-              />
-            </div>
+            <input 
+              type="range" 
+              min="0" 
+              max={duration || 0} 
+              step="1"
+              value={progress}
+              onChange={(e) => usePlayerStore.getState().seek(parseFloat(e.target.value))}
+              disabled={!currentSong || duration === 0}
+              className="w-full h-1.5 bg-white/10 rounded-full appearance-none outline-none accent-primary cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              style={{
+                background: `linear-gradient(to right, var(--color-primary) ${(progress / (duration || 1)) * 100}%, rgba(255,255,255,0.1) ${(progress / (duration || 1)) * 100}%)`
+              }}
+            />
             <div className="flex justify-between text-xs text-text-secondary mt-2">
               <span>{Math.floor(progress / 60)}:{(Math.floor(progress % 60)).toString().padStart(2, '0')}</span>
               <span>
-                {currentSong ? `${Math.floor(currentSong.duration_ms / 60000)}:${(Math.floor((currentSong.duration_ms % 60000) / 1000)).toString().padStart(2, '0')}` : '0:00'}
+                {duration ? `${Math.floor(duration / 60)}:${(Math.floor(duration % 60)).toString().padStart(2, '0')}` : '0:00'}
               </span>
             </div>
           </div>

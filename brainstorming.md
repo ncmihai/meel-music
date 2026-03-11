@@ -122,6 +122,25 @@ Flow:
 
 ---
 
+### DE CE A EȘUAT YOUTUBE IFRAME (Black Screen Issue) ❌
+
+Am încercat să folosim un player YouTube invizibil (`react-youtube`) pentru a ocoli blocurile Piped/Invidious.
+**Problema:** Browser-ele moderne (în special Safari și Chrome pe anumite extensii/setări) blochează redarea auto-play din iframe-uri dacă acestea sunt:
+1. `display: none`
+2. `opacity: 0`
+3. Nu sunt vizibile complet pe ecran.
+Acest lucru împiedică declanșarea API-ului YouTube și lasă interfața blocată la `0:00` cu un ecran negru (sau fără sunet deloc pe client).
+
+### ABORDAREA NOUĂ: API-uri Neoficiale JioSaavn ✅ (Recomandare viitoare)
+
+Pentru a oferi melodii complete (nu doar cele 30s de la iTunes) FĂRĂ iframe-uri și FĂRĂ proxy-uri YouTube blocate de Cloudflare:
+**Soluția optimă:** Folosirea unor instanțe publice de **JioSaavn API** (ex. `jiosaavn-api-privatecvc2.vercel.app`).
+*   **Pro:** Returnează direct link-uri `.mp4` / `.m4a` cu calitate de până la 320kbps.
+*   **Pro:** Putem reveni la folosirea simplă și elegantă a `<audio>`-ului nativ HTML5 (`AudioPlayer.tsx` simplificat din nou).
+*   **Pro:** Fără blocaje de Cloudflare, fără probleme de focus iframe. Perfect pentru o aplicație de muzică (Spotify Clone).
+
+---
+
 ## 💡 IDEI VIITOARE (post-launch)
 
 - [ ] **Shared queue** — ambii useri contribuie la aceeași coadă (ca o petrecere)

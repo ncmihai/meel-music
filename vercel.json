@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/piped/:match*",
+      "destination": "https://pipedapi.kavin.rocks/:match*"
+    }
+  ]
+}
