@@ -1,0 +1,43 @@
+Coloană,Tip Date,Descriere
+
+tabel - profiles
+id,UUID (Primary Key),Se leagă de auth.users.id din Supabase.
+username,Text,"Numele de afișare (ex: Tu, Iubita)."
+avatar_url,Text,Link către poza de profil.
+updated_at,Timestamp,Ultima actualizare a profilului.
+
+tabel - songs_metadata
+id,Text (Primary Key),"ID-ul unic al piesei (YouTube ID). Se inserează prin upsert la like/add to playlist."
+title,Text,Titlul melodiei.
+artist,Text,Numele artistului.
+cover_url,Text,"Link către cover art (preferabil de la Spotify Web API, HD)."
+duration_ms,Integer,Durata piesei în milisecunde.
+
+tabel - liked_songs
+user_id,UUID (Foreign Key),Cine a dat like (legat de profiles).
+song_id,Text (Foreign Key),ID-ul melodiei (din songs_metadata).
+liked_at,Timestamp,Când s-a dat like.
+UNIQUE,"(user_id, song_id)",Nu poți da like de 2 ori la aceeași melodie.
+
+tabel - playlists
+id,UUID (Primary Key),Generat automat.
+user_id,UUID (Foreign Key),Cine a creat playlistul (legat de profiles).
+name,Text,"Numele playlistului (ex: ""Drum spre mare"")."
+created_at,Timestamp,Data creării.
+
+tabel - playlist_collaborators
+playlist_id,UUID (Foreign Key),ID-ul playlistului.
+user_id,UUID (Foreign Key),ID-ul colaboratorului (legat de profiles).
+UNIQUE,"(playlist_id, user_id)",Un user poate fi colaborator o singură dată per playlist.
+
+tabel - playlist_songs
+playlist_id,UUID (Foreign Key),ID-ul playlistului.
+song_id,Text (Foreign Key),ID-ul melodiei (din songs_metadata). Upsert in songs_metadata la adăugare.
+added_at,Timestamp,Când a fost adăugată piesa.
+order_index,Integer,Ordinea piesei în playlist (pentru sortare).
+
+tabel - realtime_sessions
+user_id,UUID (Primary Key),ID-ul utilizatorului (doar un rând per user).
+current_song_id,Text (Foreign Key),Piesa care rulează acum.
+is_playing,Boolean,Dacă este pe play sau pe pauză.
+updated_at,Timestamp,Se actualizează la fiecare schimbare de piesă.
