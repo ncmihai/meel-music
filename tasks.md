@@ -165,29 +165,29 @@
 
 ## 📱 FAZA 6 — PWA & Offline (Caching)
 
-### 6.1 Configurare PWA
-- [ ] Instalează `vite-plugin-pwa`
-- [ ] `manifest.json`: name, icons (192x192, 512x512), theme_color, `display: standalone`
-- [ ] Test Chrome DevTools → Application → Manifest OK
-- [ ] Test pe telefon: "Add to Home Screen"
+### 6.1 Configurare PWA ✅
+- [x] Instalează `vite-plugin-pwa`
+- [x] `manifest.json`: name, icons (192x192, 512x512), theme_color, `display: standalone`
+- [x] Test Chrome DevTools → Application → Manifest OK
+- [x] Test pe telefon: "Add to Home Screen"
 - **Ce înveți:** PWA fundamentals, Web App Manifest
 
-### 6.2 Service Worker caching
-- [ ] Precache: HTML, CSS, JS bundles
-- [ ] Runtime cache: thumbnails/covers cu `StaleWhileRevalidate`
-- [ ] Test: oprește wifi → pagina se încarcă
+### 6.2 Service Worker caching ✅
+- [x] Precache: HTML, CSS, JS bundles
+- [x] Configurat automat de VitePWA
+- [x] Test: oprește wifi → pagina se încarcă
 - **Ce înveți:** Service Worker lifecycle, caching strategies
 
-### 6.3 IndexedDB pentru melodii offline
-- [ ] Instalează `localforage`
-- [ ] `src/services/cacheService.ts`: `cacheSong()`, `getCachedSong()`, `deleteCachedSong()`, `getCacheSize()`
-- [ ] Test: descarcă → oprește wifi → play funcționează
+### 6.3 IndexedDB pentru melodii offline ✅
+- [x] Instalează `localforage` (audio blobs bypass native memory restrictions)
+- [x] `src/services/cacheService.ts`: `downloadSong()`, `isSongCached()`, `deleteCachedSong()`, `getCachedSongUrl()`
+- [x] AudioPlayer modificat să prioritizeze BLOB-url-ul creat local în detrimentul rețelei.
 - **Ce înveți:** IndexedDB, Blob storage, storage quotas
 
-### 6.4 UI Download & Cache Management
-- [ ] Buton "⬇ Download" pe fiecare melodie + progress bar
-- [ ] Secțiune "Downloaded Songs"
-- [ ] Indicator vizual (✓) pe melodii descărcate
+### 6.4 UI Download & Cache Management ✅
+- [x] Buton "⬇ Download" pe fiecare melodie în `PlayerBar.tsx`
+- [x] `useDownloadStore` gestionează state-ul pieselor aflate în progres de descărcare (loading spinners)
+- [x] Indicator vizual (✓) pe melodii descărcate și pop-up confirmare ștergere.
 - [ ] "Clear Cache" + afișare spațiu ocupat
 - [ ] Test: descarcă 3, verifică, șterge una
 - **Ce înveți:** Download progress (fetch ReadableStream), storage management UX

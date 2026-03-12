@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { usePlayerStore } from '../stores/playerStore';
 import { getAudioStream } from '../services/youtubeService';
+import { cacheService } from '../services/cacheService';
 
 // ========================================
 // AudioPlayer (Hidden Component) — Task 5.5 Final Pivot
@@ -27,14 +28,26 @@ export default function AudioPlayer() {
   // 1. Handle Song Change — fetch stream URL and play
   useEffect(() => {
     let active = true;
+    let localBlobUrl: string | null = null;
 
     const loadAndPlaySong = async () => {
       if (!currentSong) return;
       if (!audioRef.current) return;
 
       try {
-        // Find best audio stream (now via JioSaavn MP4 direct links, enforcing duration match)
-        const streamUrl = await getAudioStream(currentSong.title, currentSong.artist, currentSong.duration_ms);
+        let streamUrl: string | null = null;
+        
+        // 1a. Check if the song is available offline in the IndexedDB Cache
+        const isCached = await cacheService.isSongCached(currentSong.id);
+        
+        if (isCached) {
+          console.log(`🎵 Playing "${currentSong.title}" from Offline Cache`);
+          localBlobUrl = await cacheService.getCachedSongUrl(currentSong.id);
+          streamUrl = localBlobUrl;
+        } else {
+          // 1b. Fetch from JioSaavn network if not cached
+          streamUrl = await getAudioStream(currentSong.title, currentSong.artist, currentSong.duration_ms);
+        }
         
         if (!active) return; // Prevent race conditions if song changes fast
         
@@ -81,6 +94,10 @@ export default function AudioPlayer() {
       active = false; 
       if ('mediaSession' in navigator) {
          navigator.mediaSession.metadata = null;
+      }
+      // Clean up the object URL to avoid memory leaks if we played a cached blob
+      if (localBlobUrl) {
+        URL.revokeObjectURL(localBlobUrl);
       }
     };
   }, [currentSong, play, pause, prev, next]);

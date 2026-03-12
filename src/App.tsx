@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './hooks/useAuth';
 import Home from './pages/Home';
@@ -6,8 +7,13 @@ import Library from './pages/Library';
 import Login from './pages/Login';
 import AudioPlayer from './components/AudioPlayer';
 import MainLayout from './components/MainLayout';
+import { useDownloadStore } from './stores/downloadStore';
 
 export default function App() {
+  useEffect(() => {
+    // Initialize offline cache tracking on app load
+    useDownloadStore.getState().init();
+  }, []);
   return (
     <BrowserRouter>
       <AuthProvider>

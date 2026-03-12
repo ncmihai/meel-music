@@ -1,12 +1,14 @@
 import { usePlayerStore } from '../stores/playerStore';
 import { useLibraryStore } from '../stores/libraryStore';
+import { useDownloadStore } from '../stores/downloadStore';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Shuffle, Repeat, Heart, Mic, ListMusic } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Shuffle, Repeat, Heart, Mic, ListMusic, Download, CheckCircle, Loader2 } from 'lucide-react';
 
 export default function PlayerBar() {
   const { currentSong, isPlaying, volume, progress, duration, togglePlay, next, prev, setVolume, seek, showLyrics, toggleLyrics, showQueue, toggleQueue } = usePlayerStore();
   const { toggleLikeSong, isLiked } = useLibraryStore();
+  const { downloadSong, deleteSong, isDownloaded, isDownloading } = useDownloadStore();
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -21,6 +23,17 @@ export default function PlayerBar() {
     }
     
     toggleLikeSong(currentSong);
+  };
+
+  const handleDownloadToggle = () => {
+    if (!currentSong) return;
+    if (isDownloaded(currentSong.id)) {
+      if (confirm('Ești sigur că vrei să ștergi această melodie din telefon?')) {
+        deleteSong(currentSong.id);
+      }
+    } else {
+      downloadSong(currentSong);
+    }
   };
 
   const formatTime = (seconds: number) => {
@@ -57,6 +70,21 @@ export default function PlayerBar() {
               className={`ml-4 transition-colors ${isLiked(currentSong.id) ? 'text-[#1db954]' : 'text-[#b3b3b3] hover:text-white'}`}
             >
               <Heart size={16} fill={isLiked(currentSong.id) ? 'currentColor' : 'none'} />
+            </button>
+            <button 
+              onClick={handleDownloadToggle}
+              disabled={isDownloading(currentSong.id)}
+              className={`ml-3 transition-colors ${
+                isDownloaded(currentSong.id) ? 'text-[#1db954]' : 'text-[#b3b3b3] hover:text-white'
+              }`}
+            >
+              {isDownloading(currentSong.id) ? (
+                <Loader2 size={16} className="animate-spin text-[#1db954]" />
+              ) : isDownloaded(currentSong.id) ? (
+                <CheckCircle size={16} />
+              ) : (
+                <Download size={16} />
+              )}
             </button>
           </>
         ) : (
