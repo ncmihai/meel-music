@@ -155,9 +155,9 @@
 - [x] S-a renunțat la proxy-uri locale și Vercel rules, deoarece iTunes API funcționează nativ direct în browser având `Access-Control-Allow-Origin: *`.
 
 ### 5.7 Media Session API (Lock Screen Controls)
-- [ ] `navigator.mediaSession.metadata` = `title`, `artist`, `artwork` (de la Spotify covers)
-- [ ] Action handlers: `play`, `pause`, `previoustrack`, `nexttrack`
-- [ ] Conectează handlers la Zustand actions
+- [x] `navigator.mediaSession.metadata` = `title`, `artist`, `artwork` (de la Spotify covers)
+- [x] Action handlers: `play`, `pause`, `previoustrack`, `nexttrack`
+- [x] Conectează handlers la Zustand actions
 - [ ] Test pe telefon: blochează ecranul → controale funcționează
 - **Ce înveți:** Media Session API, OS integration, browser ↔ OS communication
 
@@ -280,7 +280,13 @@
 - [ ] Test: Chrome, Safari (desktop + mobile), Firefox
 - **Ce înveți:** Lighthouse, code splitting, lazy loading
 
-### 8.4 Polish final
+### 8.4 Server Backend (API Key Censor Proxy) — Nou 🔒
+- [ ] Creare server de NodeJS / Next.js API Routes / Cloudflare Worker.
+- [ ] Mutarea `VITE_SPOTIFY_CLIENT_SECRET` exclusiv pe server (pentru a nu mai ajunge la client).
+- [ ] Endpoint de proxy pentru fetch-urile de token-uri Spotify și request-uri sensibile direct de la browser.
+- **Ce înveți:** Security best practices, backend proxy, ascunderea cheilor de API pe server.
+
+### 8.5 Polish final
 - [ ] Empty states, error states, loading states pe toate paginile
 - [ ] Tranziții smooth între pagini
 - [ ] Consistență vizuală globală

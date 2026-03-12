@@ -18,6 +18,8 @@ export default function AudioPlayer() {
   const setProgress = usePlayerStore((state) => state.setProgress);
   const setDuration = usePlayerStore((state) => state.setDuration);
   const next = usePlayerStore((state) => state.next);
+  const prev = usePlayerStore((state) => state.prev);
+  const play = usePlayerStore((state) => state.play);
   const pause = usePlayerStore((state) => state.pause);
   const seekTarget = usePlayerStore((state) => state.seekTarget);
   const clearSeek = usePlayerStore((state) => state.clearSeek);
@@ -58,8 +60,30 @@ export default function AudioPlayer() {
 
     loadAndPlaySong();
 
-    return () => { active = false; };
-  }, [currentSong]);
+    // 2. Media Session API (Phase 5.7) — Lock screen / OS controls
+    if ('mediaSession' in navigator && currentSong) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: currentSong.title,
+        artist: currentSong.artist,
+        album: currentSong.album || 'MeelMusic',
+        artwork: [
+          { src: currentSong.cover_url, sizes: '512x512', type: 'image/jpeg' }
+        ]
+      });
+
+      navigator.mediaSession.setActionHandler('play', () => play());
+      navigator.mediaSession.setActionHandler('pause', () => pause());
+      navigator.mediaSession.setActionHandler('previoustrack', () => prev());
+      navigator.mediaSession.setActionHandler('nexttrack', () => next());
+    }
+
+    return () => { 
+      active = false; 
+      if ('mediaSession' in navigator) {
+         navigator.mediaSession.metadata = null;
+      }
+    };
+  }, [currentSong, play, pause, prev, next]);
 
   // 2. Handle Play/Pause toggle from UI
   useEffect(() => {

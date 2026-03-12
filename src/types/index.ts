@@ -11,13 +11,13 @@ export interface Profile {
   updated_at: string;
 }
 
-/** Song metadata (maps to `songs_metadata` table) */
 export interface Song {
-  id: string;           // YouTube ID
+  id: string;           // YouTube ID / Spotify ID
   title: string;
   artist: string;
-  cover_url: string;    // Spotify HD cover preferred
+  cover_url: string;    // HD cover preferred
   duration_ms: number;
+  album?: string;
 }
 
 /** Playlist (maps to `playlists` table) */
